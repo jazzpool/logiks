@@ -1,0 +1,25 @@
+{
+  "name": "logx",
+  "version": "0.0.1",
+  "description": "Pool Logger",
+  "homepage": "https://git.cryptoproject.io/coiner/logx",
+  "repository": {
+    "type": "git",
+    "url": "https://git.cryptoproject.io/coiner/logx.git"
+  },
+  "author": [
+    "Trdat Mkrtchyan <womtromb@gmail.com>"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "dependencies": {
+  	"dateformat": "1.0.12",
+  	"colors": "*"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=0.10"
+  }
+}

@@ -1,0 +1,105 @@
+'use strict';
+
+var dateFormat = require('dateformat');
+var colors = require('colors');
+
+var levelPriorities = [
+    'debug',
+    'warning',
+    'error',
+    'special',
+    'critical',
+];
+
+/**
+ * @public
+ * @param {object} config
+ * @return {Logger}
+ */
+module.exports = function Logger(config) {
+    var self = this;
+
+    var logLevelPriority = levelPriorities.indexOf(config.logLevel);
+    var logColors = config.colors;
+
+    if (logLevelPriority == -1) {
+        throw new Error('There is no such log level: ' + config.logLevel);
+    }
+
+    function log(level, system, component, text, subcat){
+        const textLogLevel = levelPriorities.indexOf(level);
+
+        if (textLogLevel < logLevelPriority) {
+            return;
+        }
+
+        if (subcat){
+            var realText = subcat;
+            var realSubCat = text;
+            text = realText;
+            subcat = realSubCat;
+        }
+
+        var system = levelToColor(level, [
+            dateFormat(new Date(), 'yyyy-mm-dd HH:MM:ss'),
+            system && '[' + system + ']',
+        ].join(' ')) || '';
+
+        var component = component ? [
+            '[',
+            logColors ? component.italic : component,
+            ']',
+        ].join('') : '';
+
+        var subcat = subcat ? [
+            '(',
+            logColors ? subcat.bold.grey : subcat,
+            ')',
+        ].join('') : '';
+
+        var message = logColors ? text.grey : text
+
+        console.log([
+            system,
+            component,
+            subcat,
+            message
+        ].join(' '));
+
+        return self
+    }
+
+    levelPriorities.forEach(function(logType) {
+        self[logType] = function(){
+            var args = [].slice.call(arguments);
+            args.unshift(logType);
+            return log.apply(this, args);
+        };
+    });
+}
+
+/**
+ * @private
+ * @param {string} level
+ * @param {string} text
+ * @return {string} colored
+ */
+function levelToColor(level, text) {
+    switch(level) {
+        case 'special':
+            return text.cyan.underline;
+        case 'debug':
+            return text.green;
+        case 'warning':
+            return text.yellow;
+        case 'error':
+            return text.red;
+        case 'info':
+            return text.grey.italic
+        case 'critical':
+            return text.red.bold
+        default:
+            console.log('Unknown level ' + level);
+            return text.italic;
+    }
+}
