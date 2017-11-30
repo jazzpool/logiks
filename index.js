@@ -19,15 +19,15 @@ var levelPriorities = [
 module.exports = function Logger(config) {
     var self = this;
 
-    var logLevelPriority = levelPriorities.indexOf(config.logLevel);
+    var logLevelPriority = levelPriorities.indexOf(config.level);
     var logColors = config.colors;
 
     if (logLevelPriority == -1) {
-        throw new Error('There is no such log level: ' + config.logLevel);
+        throw new Error('There is no such log level: ' + config.level);
     }
 
     function log(level, system, component, text, subcat){
-        const textLogLevel = levelPriorities.indexOf(level);
+        var textLogLevel = levelPriorities.indexOf(level);
 
         if (textLogLevel < logLevelPriority) {
             return;
