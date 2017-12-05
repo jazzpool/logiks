@@ -55,8 +55,6 @@ function Logger(config) {
  * @return {Logger}
  */
 Logger.prototype.withSystem = function(system) {
-    this.system = system
-
     var logger = new Logger(this.config)
     logger.system = system
 
@@ -72,8 +70,6 @@ Logger.prototype.withComponent = function(component) {
     if (!this.system) {
         throw new Error('Choose system first');
     }
-
-    this.component = component
 
     var logger = new Logger(this.config)
     logger.component = component
