@@ -57,9 +57,16 @@ Logger.prototype.withSystem = function(system) {
     return logger;
 };
 
-
+/**
+ * @public
+ * @param {string} level
+ * @param {string} system
+ * @param {string} component
+ * @param {string} text
+ * @param {string} [subcat]
+ * @return {Logger}
+ */
 Logger.prototype.log = function log(level, system, component, text, subcat){
-
     var textLogLevel = levelPriorities.indexOf(level);
     var logColors = this.config.colors 
 
