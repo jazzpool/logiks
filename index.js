@@ -23,6 +23,8 @@ function Logger(config) {
 
     self.config = config
     self.logLevelPriority = levelPriorities.indexOf(config.level);
+    this.system = this.config.system;
+    this.component = this.config.component;
 
     if (self.logLevelPriority == -1) {
         throw new Error('There is no such log level: ' + config.level);
@@ -32,6 +34,10 @@ function Logger(config) {
         self[logType] = function(){
             var args = [].slice.call(arguments);
             
+            if (self.component) {
+                args.unshift(self.component);
+            }
+
             if (self.system) {
                 args.unshift(self.system);
             }
@@ -53,6 +59,24 @@ Logger.prototype.withSystem = function(system) {
 
     var logger = new Logger(this.config)
     logger.system = system
+
+    return logger;
+};
+
+/**
+ * @public
+ * @param {string} component
+ * @return {Logger}
+ */
+Logger.prototype.withComponent = function(component) {
+    if (!this.system) {
+        throw new Error('Choose system first');
+    }
+
+    this.component = component
+
+    var logger = new Logger(this.config)
+    logger.component = component
 
     return logger;
 };
