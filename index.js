@@ -18,6 +18,7 @@ var levelPriorities = [
  */
 module.exports = function Logger(config) {
     var self = this;
+    self.config = config
 
     var logLevelPriority = levelPriorities.indexOf(config.level);
     var logColors = config.colors;
@@ -77,6 +78,25 @@ module.exports = function Logger(config) {
         };
     });
 }
+
+/**
+ * @public
+ * @param {string} system
+ * @return {Logger}
+ */
+Logger.prototype.withSystem = function(system) {
+    var logger = new Logger(self.config)
+
+    levelPriorities.forEach(function(logType) {
+        logger[logType] = function() {
+            var args = [].slice.call(arguments);
+            args.unshift(logType);
+            return log.apply(this, args.concat(system));
+        };
+    });
+
+    return logger
+};
 
 /**
  * @private
