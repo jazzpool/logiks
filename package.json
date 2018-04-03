@@ -1,7 +1,7 @@
 {
   "name": "logx",
-  "version": "0.0.1",
-  "description": "Pool Logger",
+  "version": "0.0.2",
+  "description": "Simple logger",
   "homepage": "https://git.cryptoproject.io/coiner/logx",
   "repository": {
     "type": "git",
@@ -12,11 +12,14 @@
   ],
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "test": "jest"
   },
   "dependencies": {
-  	"dateformat": "1.0.12",
-  	"colors": "*"
+    "dateformat": "1.0.12",
+    "colors": "*"
+  },
+  "devDependencies": {
+    "jest": "^21.2.1"
   },
   "license": "MIT",
   "engines": {

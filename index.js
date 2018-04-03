@@ -3,15 +3,16 @@
 var dateFormat = require('dateformat');
 var colors = require('colors');
 
-var levelPriorities = [
-    'debug',
-    'warning',
-    'error',
-    'special',
-    'critical',
+var LEVELS = [
+    ['silly', colors.white],
+    ['debug', colors.green],
+    ['warning', colors.yellow],
+    ['error', colors.red],
+    ['special', colors.cyan.underline],
+    ['critical', colors.red.bold],
 ];
 
-module.exports = Logger
+module.exports = Logger;
 
 /**
  * @public
@@ -21,17 +22,33 @@ module.exports = Logger
 function Logger(config) {
     var self = this;
 
-    self.config = config
-    self.logLevelPriority = levelPriorities.indexOf(config.level);
+    this.config = config
+    this.levels = config.levels || LEVELS;
+    this.level = config.level;
     this.system = this.config.system;
     this.component = this.config.component;
 
-    if (self.logLevelPriority == -1) {
-        throw new Error('There is no such log level: ' + config.level);
-    }
+    this.write = config.log || console.log.bind(console);
 
-    levelPriorities.forEach(function(logType) {
-        self[logType] = function(){
+    this.logLevelPriority = -1;
+    this.levelPriorities = {};
+
+    this.levels.forEach(function(logDef, i) {
+        var levelName = logDef[0];
+        var levelColorFn = logDef[1];
+
+        if (levelName === self.level) {
+            self.logLevelPriority = i;
+        }
+
+        self.levelPriorities[levelName] = i;
+        var colorFn = typeof levelColorFn === 'function'
+            ? levelColorFn
+            : function (text) {
+                return text[levelColorFn];
+            };
+
+        self[levelName] = function() {
             var args = [].slice.call(arguments);
             
             if (self.component) {
@@ -42,11 +59,15 @@ function Logger(config) {
                 args.unshift(self.system);
             }
 
-            args.unshift(logType);
+            args.unshift(levelName);
 
-            return this.log.apply(this, args);
+            return this.log.call(this, colorFn, args);
         };
     });
+
+    if (self.logLevelPriority == -1) {
+        throw new Error('There is no such log level: ' + config.level);
+    }
 }
 
 /**
@@ -55,8 +76,8 @@ function Logger(config) {
  * @return {Logger}
  */
 Logger.prototype.withSystem = function(system) {
-    var logger = new Logger(this.config)
-    logger.system = system
+    var logger = new Logger(this.config);
+    logger.system = system;
 
     return logger;
 };
@@ -71,8 +92,8 @@ Logger.prototype.withComponent = function(component) {
         throw new Error('Choose system first');
     }
 
-    var logger = new Logger(this.config)
-    logger.component = component
+    var logger = new Logger(this.config);
+    logger.component = component;
 
     return logger;
 };
@@ -86,41 +107,49 @@ Logger.prototype.withComponent = function(component) {
  * @param {string} [subcat]
  * @return {Logger}
  */
-Logger.prototype.log = function log(level, system, component, text, subcat){
-    var textLogLevel = levelPriorities.indexOf(level);
-    var logColors = this.config.colors 
+Logger.prototype.log = function log(colorFn, logArgs){
+    var level = logArgs[0];
+    var system = logArgs[1];
+    var component = logArgs[2];
+    var text = logArgs[3];
+    var subcat = logArgs[4];
+
+    var textLogLevel = this.levelPriorities[level];
+    var useColors = this.config.colors;
 
     if (textLogLevel < this.logLevelPriority) {
         return;
     }
 
-    if (subcat){
+    if (subcat) {
         var realText = subcat;
         var realSubCat = text;
         text = realText;
         subcat = realSubCat;
     }
 
-    var system = levelToColor(level, [
+    var systemText = [
         dateFormat(new Date(), 'yyyy-mm-dd HH:MM:ss'),
         system && '[' + system + ']',
-    ].join(' ')) || '';
+    ].join(' ') || '';
+
+    var system = colorFn(systemText);
 
     var component = component ? [
         '[',
-        logColors ? component.italic : component,
+        useColors ? component.italic : component,
         ']',
     ].join('') : '';
 
     var subcat = subcat ? [
         '(',
-        logColors ? subcat.bold.grey : subcat,
+        useColors ? subcat.bold.grey : subcat,
         ')',
     ].join('') : '';
 
-    var message = logColors ? text.grey : text
+    var message = useColors ? text.grey : text
 
-    console.log([
+    this.write([
         system,
         component,
         subcat,
@@ -128,30 +157,4 @@ Logger.prototype.log = function log(level, system, component, text, subcat){
     ].join(' '));
 
     return this
-}
-
-/**
- * @private
- * @param {string} level
- * @param {string} text
- * @return {string} colored
- */
-function levelToColor(level, text) {
-    switch(level) {
-        case 'special':
-            return text.cyan.underline;
-        case 'debug':
-            return text.green;
-        case 'warning':
-            return text.yellow;
-        case 'error':
-            return text.red;
-        case 'info':
-            return text.grey.italic
-        case 'critical':
-            return text.red.bold
-        default:
-            console.log('Unknown level ' + level);
-            return text.italic;
-    }
 }

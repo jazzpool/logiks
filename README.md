@@ -1,4 +1,4 @@
-# logx 👍
+# logx 📝
 
 Simple logger module 
 
