@@ -100,11 +100,13 @@ Logger.prototype.withComponent = function(component) {
 
 /**
  * @public
- * @param {string} level
- * @param {string} system
- * @param {string} component
- * @param {string} text
- * @param {string} [subcat]
+ * @param {function} colorFn
+ * @param {array} logArgs
+ * @param {string} logArgs[0] level
+ * @param {string} logArgs[1] system
+ * @param {string} logArgs[2] component
+ * @param {string} logArgs[3] text
+ * @param {string} logArgs[4] [subcat]
  * @return {Logger}
  */
 Logger.prototype.log = function log(colorFn, logArgs){
