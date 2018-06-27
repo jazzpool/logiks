@@ -93,6 +93,7 @@ Logger.prototype.withComponent = function(component) {
     }
 
     var logger = new Logger(this.config);
+    logger.system = this.system;
     logger.component = component;
 
     return logger;
