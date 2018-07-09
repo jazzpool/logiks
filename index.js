@@ -51,6 +51,10 @@ function Logger(config) {
         self[levelName] = function() {
             var args = [].slice.call(arguments);
             
+            if (self.subcat) {
+                args.unshift(self.subcat);
+            }
+
             if (self.component) {
                 args.unshift(self.component);
             }
@@ -98,6 +102,16 @@ Logger.prototype.withComponent = function(component) {
 
     return logger;
 };
+
+Logger.prototype.withSubCat = function(subcat) {
+    var logger = new Logger(this.config);
+
+    logger.system = this.system
+    logger.component = this.component;
+    logger.subcat = subcat;
+
+    return logger;
+}
 
 /**
  * @public
