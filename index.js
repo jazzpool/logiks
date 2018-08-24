@@ -3,13 +3,21 @@
 var dateFormat = require('dateformat');
 var colors = require('colors');
 
+var cyanText = function (t) {
+    return colors.underline(colors.cyan(t));
+}
+
+var criticalText = function (t) {
+    return colors.bold(colors.red(t));
+}
+
 var LEVELS = [
     ['silly', colors.white],
     ['debug', colors.green],
     ['warning', colors.yellow],
     ['error', colors.red],
-    ['special', colors.cyan.underline],
-    ['critical', colors.red.bold],
+    ['special', cyanText],
+    ['critical', criticalText],
 ];
 
 module.exports = Logger;
