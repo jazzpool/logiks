@@ -14,6 +14,7 @@ var criticalText = function (t) {
 var LEVELS = [
     ['silly', colors.white],
     ['debug', colors.green],
+    ['info', colors.magenta],
     ['warning', colors.yellow],
     ['error', colors.red],
     ['special', cyanText],
