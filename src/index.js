@@ -21,15 +21,18 @@ function formatMsg(value) {
 
 class LogX {
     constructor(config) {
-        this.config = {colors: false, level: 'info', ...config};
+        this.config = {
+            colors: false,
+            level: 'info',
+            date: true,
+            ...config,
+        };
 
-        if (!this.config.json) {
-            this.config.json = {
-                maxLength: 120,
-                inputColor: chalk.rgb(167, 101, 121),
-                outputColor: chalk.rgb(95, 96, 169),
-            };
-        }
+        this.config.json = {
+            maxLength: config.json.maxLength || 64,
+            defaultColor: config.json.defaultColor || chalk.rgb(167, 101, 121),
+            maxRowLength: config.json.maxRowLength || process.stdout.columns - 5,
+        };
 
         this.levels = config.levels || LEVELS;
 
@@ -54,7 +57,7 @@ class LogX {
             };
 
             this[levelName].json = (...args) => {
-                if (levelPriorities[levelName] > logLevelPriority) {
+                if (levelPriorities[levelName] < logLevelPriority) {
                     return;
                 }
 
@@ -62,10 +65,10 @@ class LogX {
 
                 if (args.length) {
                     this.log(levelColorFn, ...args.concat(''));
-                    this.json(json, false);
+                    this.json(json, false, levelColorFn);
                 } else {
                     const header = this.getMessage(levelColorFn, args.concat('')); // TODO
-                    this.json(json, header);
+                    this.json(json, header, levelColorFn);
                 }
                 return;
             };
@@ -115,6 +118,7 @@ class LogX {
                 colorFn(`[${this.config.system || args[0]}]`),
                 msgFn(formatMsg(args[1])),
             ];
+            console.log('message', message);
             break;
         case 3: /* log(system, component, message) */
             message = [
@@ -133,7 +137,7 @@ class LogX {
             ];
         }
 
-        return datePrefix + ' ' + message.join(' ');
+        return this.config.date ? datePrefix + ' ' + message.join(' ') : message.join(' ');
     }
 
     log(...args) {
@@ -141,11 +145,13 @@ class LogX {
         return this.logFn(msg);
     }
 
-    json(json, header, direction) {
-        const datePrefix = dateFormat(new Date(), 'yyyy-mm-dd HH:MM:ss');
-        this.logFn(printJson(json, header, direction, this.config, datePrefix));
+    json(json, header, colorFn) {
+        const datePrefix = this.config.date && dateFormat(new Date(), 'yyyy-mm-dd HH:MM:ss');
+        this.logFn(printJson(json, header, colorFn || this.config.json.defaultColor, this.config, datePrefix));
         return;
     }
 }
+
+
 
 module.exports = LogX;

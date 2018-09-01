@@ -28,8 +28,13 @@ log.error('System', 'Component', 'Message')
 	</tr>
 	<tr>
 		<td><code>level</code></td>
-		<td>Log level. [Look levels](#levels)</td>
+		<td>Log level. <a href="#levels">Look levels</a></td>
 		<td><code>info</code></td>
+	</tr>
+	<tr>
+		<td><code>date</code></td>
+		<td>Should every message line prefixed with date or not</td>
+		<td><code>true</code></td>
 	</tr>
 	<tr>
 		<td><code>levels</code></td>
@@ -53,18 +58,18 @@ log.error('System', 'Component', 'Message')
 	</tr>
 	<tr>
 		<td><code>json.maxLength</code></td>
-		<td>Max length of json lines</td>
-		<td><code>120</code></td>
+		<td>Max length of lines in json message. JSON will be stringified counting this option.</td>
+		<td><code>64</code></td>
+	</tr>
+		<tr>
+		<td><code>json.maxRowLength</code></td>
+		<td>Max line length in json message, if symbols count exceeded it will be striped by ...</td>
+		<td><code>process.stdout.columns - 5</code></td>
 	</tr>
 	<tr>
-		<td><code>json.inputColor</code></td>
-		<td>Coloring function of input messages color in json</td>
+		<td><code>json.defaultColor</code></td>
+		<td>Default coloring function of messages in json</td>
 		<td><code>chalk.rgb(167, 101, 121)</code></td>
-	</tr>
-	<tr>
-		<td><code>json.outputColor</code></td>
-		<td>Coloring function of output messages in json.</td>
-		<td><code>chalk.rgb(95, 96, 169)</code></td>
 	</tr>
 </table>	
 
@@ -82,4 +87,25 @@ Levels are prioritized entities to separate log messages by semantic. You can co
 
 ## json
 
-TBD
+Every level logging function has `.json` property. 
+
+```js
+logger.warning.json('API', 'Payments', 'v3.2', 'Health check failed', {"reward":128.23,"instances":2,"availableApis":[{"host":"127.0.0.1","port":8888},{"host":"127.0.0.1","port":8889}],"healthCheck":false})
+```
+
+Will produce: 
+
+```
+2018-09-01 10:58:16 [API] [Payments] (v3.2) Health check failed
+2018-09-01 10:58:16 ───┬───────────────────────────────────────────────────────────────────
+2018-09-01 10:58:16 0  │ {
+2018-09-01 10:58:16 1  │   "reward": 128.23,
+2018-09-01 10:58:16 2  │   "instances": 2,
+2018-09-01 10:58:16 3  │   "availableApis": [
+2018-09-01 10:58:16 4  │     { "host": "127.0.0.1", "port": 8888 },
+2018-09-01 10:58:16 5  │     { "host": "127.0.0.1", "port": 8889 }
+2018-09-01 10:58:16 6  │   ],
+2018-09-01 10:58:16 7  │   "healthCheck": false
+2018-09-01 10:58:16 8  │ }
+2018-09-01 10:58:16 ───┴───────────────────────────────────────────────────────────────────
+```

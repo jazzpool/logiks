@@ -1,19 +1,18 @@
 const beautify = require('json-beautify');
 
-module.exports = function(json, header, direction, config, prefix = '') {
+module.exports = function(json, header, colorFn, config, prefix = '') {
     const text = beautify(json, null, 2, config.json.maxLength);
+    prefix = prefix ? prefix + ' ' : '';
 
-    const colorFn = direction === 'in' ? config.json.inputColor : config.json.outputColor;
-    const [length, form, padding] = countForm(text, config.json.maxTerminalLength, prefix);
+    const maxRowLength = config.json.maxRowLength - prefix.length - 1;
+    const [length, form, padding] = countForm(text, maxRowLength, prefix);
 
     const offset = new Array(padding + 3).fill(' ').join('');
     const dividerStart = new Array(padding).fill('─').join('');
-    const dividerEnd = new Array(length + 1).fill('─').join('');
+    const dividerEnd = new Array(length).fill('─').join('');
 
     const dividerUp = dividerStart + '┬' + dividerEnd;
     const dividerDown = dividerStart + '┴' + dividerEnd;
-
-    prefix = prefix + ' ';
 
     const template = colorFn([
         header && (prefix + (header && `${offset}${header}:`)),
@@ -39,7 +38,7 @@ function countForm(text, max, prefix) {
     const padding = String(rows.length).length;
 
     let t = rows.map((row, i) => {
-        let r = prefix + ' ' + pad(padding, String(i)) + '  │ ' + row;
+        let r = prefix + pad(padding, String(i)) + '  │ ' + row;
 
         if (r.length >= max) {
             r = r.slice(0, max - 3) + '...';
