@@ -1,28 +1,41 @@
 {
   "name": "logx",
-  "version": "0.0.6",
+  "version": "1.0.0",
   "description": "Simple logger",
-  "homepage": "https://git.cryptoproject.io/coiner/logx",
+  "homepage": "https://jazzpool.github.io/logx",
   "repository": {
     "type": "git",
-    "url": "https://git.cryptoproject.io/coiner/logx.git"
+    "url": "https://github.com/jazzpool/logx.git"
   },
   "author": [
     "Trdat Mkrtchyan <womtromb@gmail.com>"
   ],
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "eslint-check": "node node_modules/eslint-pre-commit-diff"  
   },
+  "pre-commit": [
+    "eslint-check"
+  ],
   "dependencies": {
+    "chalk": "^2.4.1",
     "dateformat": "1.0.12",
-    "colors": "*"
+    "json-beautify": "^1.0.1"
   },
   "devDependencies": {
-    "jest": "^21.2.1"
+    "jest": "^21.2.1",
+    "eslint": "^4.19.1",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-config-nodejs": "^2.0.0",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.3.0",
+    "eslint-plugin-standard": "^2.0.1",
+    "eslint-pre-commit-diff": "^1.0.4"
   },
   "license": "MIT",
   "engines": {
-    "node": ">=0.10"
+    "node": ">=8.0.0"
   }
 }
