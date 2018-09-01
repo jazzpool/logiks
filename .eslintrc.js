@@ -20,6 +20,11 @@ module.exports = {
     'parserOptions': {
         'ecmaVersion': 2018
     },
+    'globals': {
+        'describe': 0,
+        'it': 0,
+        'expect': 0,
+    },
     'rules': {
         'no-console': 0,
         'no-process-exit': 0,
@@ -62,4 +67,6 @@ module.exports = {
         'node/shebang': 0,
     },
 };
+
+
 

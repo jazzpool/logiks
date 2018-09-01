@@ -28,15 +28,16 @@ class LogX {
             ...config,
         };
 
+        this.config.json = this.config.json || {};
         this.config.json = {
-            maxLength: config.json.maxLength || 64,
-            defaultColor: config.json.defaultColor || chalk.rgb(167, 101, 121),
-            maxRowLength: config.json.maxRowLength || process.stdout.columns - 5,
+            maxLength: this.config.json.maxLength || 64,
+            defaultColor: this.config.json.defaultColor || chalk.rgb(167, 101, 121),
+            maxRowLength: this.config.json.maxRowLength || process.stdout.columns - 5,
         };
 
         this.levels = config.levels || LEVELS;
-
         this.logFn = config.logger || console.log;
+        this.__levels = {};
 
         let logLevelPriority = -1;
         const levelPriorities = {};
@@ -47,6 +48,7 @@ class LogX {
             }
 
             levelPriorities[levelName] = i;
+            this.__levels[levelName] = levelColorFn;
 
             this[levelName] = (...args) => {
                 if (levelPriorities[levelName] < logLevelPriority) {
