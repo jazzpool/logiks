@@ -1,7 +1,7 @@
 {
-  "name": "logx",
-  "version": "1.0.0",
-  "description": "Simple logger",
+  "name": "log-x",
+  "version": "1.0.0rc-01",
+  "description": "Nodejs logger",
   "homepage": "https://jazzpool.github.io/logx",
   "repository": {
     "type": "git",
@@ -10,7 +10,7 @@
   "author": [
     "Trdat Mkrtchyan <womtromb@gmail.com>"
   ],
-  "main": "index.js",
+  "main": "./src/index.js",
   "scripts": {
     "test": "jest",
     "eslint-check": "node node_modules/eslint-pre-commit-diff"  
