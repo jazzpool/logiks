@@ -49,7 +49,7 @@ class LogX {
             levelPriorities[levelName] = i;
 
             this[levelName] = (...args) => {
-                if (levelPriorities[levelName] > logLevelPriority) {
+                if (levelPriorities[levelName] < logLevelPriority) {
                     return;
                 }
 
@@ -64,10 +64,10 @@ class LogX {
                 const json = args.pop();
 
                 if (args.length) {
-                    this.log(levelColorFn, ...args.concat(''));
+                    this.log(levelColorFn, ...args);
                     this.json(json, false, levelColorFn);
                 } else {
-                    const header = this.getMessage(levelColorFn, args.concat('')); // TODO
+                    const header = this.getMessage(levelColorFn, ...args); // TODO
                     this.json(json, header, levelColorFn);
                 }
                 return;
@@ -110,7 +110,7 @@ class LogX {
         switch (args.length) {
         case 1: /* log(message) */
             message = [
-                msgFn(formatMsg(args[0])),
+                colorFn(formatMsg(args[0])),
             ];
             break;
         case 2: /* log(system, message) */
@@ -118,7 +118,6 @@ class LogX {
                 colorFn(`[${this.config.system || args[0]}]`),
                 msgFn(formatMsg(args[1])),
             ];
-            console.log('message', message);
             break;
         case 3: /* log(system, component, message) */
             message = [
