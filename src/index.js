@@ -19,7 +19,7 @@ function formatMsg(value) {
     return value;
 }
 
-class LogX {
+class Logiks {
     constructor(config) {
         this.config = {
             colors: false,
@@ -78,7 +78,7 @@ class LogX {
     }
 
     withSystem(system) {
-        return new LogX({...this.config, system});
+        return new Logiks({...this.config, system});
     }
 
     withComponent(component) {
@@ -86,7 +86,7 @@ class LogX {
             throw new Error('At first specify system');
         }
 
-        return new LogX({...this.config, component});
+        return new Logiks({...this.config, component});
     }
 
     withSubCat(subCat) {
@@ -94,7 +94,7 @@ class LogX {
             throw new Error('At first specify system and component');
         }
 
-        return new LogX({...this.config, subCat});
+        return new Logiks({...this.config, subCat});
     }
 
     getMessage(colorFn, ...args) {
@@ -155,4 +155,4 @@ class LogX {
 
 
 
-module.exports = LogX;
+module.exports = Logiks;

@@ -1,17 +1,56 @@
-# logx 📝
+# Logiks 📝
 
-Simple logger module 
+Simple colored logger module with levels of logging and semantic output.
 
 ```js
-var log = new Logx({
-	level: 'debug',
-	color: true,
+var logger = new Logiks({
+    level: 'debug',
+    color: true,
 });
 
-log.error('System', 'Component', 'Message')
-```
+logger.error('System', 'Component', 'Message')
 
 > 2017-11-30 20:03:35 [System] [Component] Message
+```
+
+## Signature semantics
+
+Logger can take up to 4 different positional arguments. 
+```
+logger.error(
+    system: string,
+    component: string',
+    subCategory: string,
+    message: string',
+)
+```
+
+Note that message argument will appear anyway and if `n`th argument missed it means that `n-1`th argu,ent is message argument.  Let assume we have code like bellow: 
+
+
+```js
+logger.special('Payments started@);
+
+logger.info('API', 'Payments', 'Performing payments');
+/* ...*/
+const response = {status: '200', confirmationHash:'d8e8fca2dc0f896fd7cb4cb'};
+logger.info.json('API', 'Payments', 'v3.2', 'Payments was performed', response);
+```
+
+The output will be: 
+
+```
+2018-09-02 02:55:27 Payments started!
+2018-09-02 02:01:12 [API] [Payments] Performing payments
+2018-09-02 02:01:39 [API] [Payments] (v3.2) Payments was performed
+2018-09-02 02:01:39 ───┬────────────────────────────────────────────────────────────────────────
+2018-09-02 02:01:39 0  │ {
+2018-09-02 02:01:39 1  │   "status": "200",
+2018-09-02 02:01:39 2  │   "confirmationHash": "d8e8fca2dc0f896fd7cb4cb"
+2018-09-02 02:01:39 3  │ }
+2018-09-02 02:01:39 ───┴────────────────────────────────────────────────────────────────────────
+```
+
 
 ## Config
 
@@ -75,7 +114,7 @@ log.error('System', 'Component', 'Message')
 
 ## Levels
 
-Levels are prioritized entities to separate log messages by semantic. You can cover yout code with logging different depth and if you want to run your app on production mode you will not see debug log level. These are default log levels of LogX: 
+Levels are prioritized entities to separate log messages by semantic. You can cover yout code with logging different depth and if you want to run your app on production mode you will not see debug log level. These are default log levels of Logiks: 
 
  - `silly`: <span style="padding: 2px; color: white; background: black;">chalk.white</span>
  - `debug`: <span style="padding: 2px; color: green;">chalk.green</span>
@@ -85,7 +124,7 @@ Levels are prioritized entities to separate log messages by semantic. You can co
  - `special`: <span style="padding: 2px; color: cyan; text-decoration: underline;">chalk.cyan.underline</span>
  - `critical`: <span style="padding: 2px; color: #db888a; text-decoration: underline; font-weight: bold;">chalk.red.underline.bold</span>
 
-## json
+## JSON
 
 Every level logging function has `.json` property. 
 

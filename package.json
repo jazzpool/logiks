@@ -1,6 +1,6 @@
 {
   "name": "logks",
-  "version": "1.0.0rc-01",
+  "version": "1.0.0rc-02",
   "description": "Nodejs logger",
   "homepage": "https://jazzpool.github.io/logx",
   "repository": {
