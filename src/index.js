@@ -122,7 +122,7 @@ class Logiks {
         return new Logiks({...this.config, subCat});
     }
 
-    getMessage(colorFn, ...args) {
+    getMessage(colorFn, ...argv) {
         let msgFn = chalk.dim;
 
         if (!this.config.colors) {
@@ -133,6 +133,12 @@ class Logiks {
 
         let message = [];
 
+        const args = [
+            this.config.system,
+            this.config.component,
+            this.config.subCat,
+        ].filter(Boolean).concat(argv);
+
         switch (args.length) {
         case 1: /* log(message) */
             message = [
@@ -141,13 +147,13 @@ class Logiks {
             break;
         case 2: /* log(system, message) */
             message = [
-                colorFn(`[${this.config.system || args[0]}]`),
+                colorFn(`[${args[0]}]`),
                 msgFn(formatMsg(args[1])),
             ];
             break;
         case 3: /* log(system, component, message) */
             message = [
-                colorFn(`[${this.config.system || args[0]}]`),
+                colorFn(`[${args[0]}]`),
                 colorFn(chalk.dim(`[${this.config.component || args[1]}]`)),
                 msgFn(formatMsg(args[2])),
             ];
@@ -155,9 +161,9 @@ class Logiks {
         case 4:
         default: /* log(system. component, subcat, message) */
             message = [
-                colorFn(`[${this.config.system || args[0]}]`),
-                colorFn(chalk.dim(`[${this.config.component || args[1]}]`)),
-                colorFn(chalk.italic.dim(`(${this.config.subcat || args[2]})`)),
+                colorFn(`[${args[0]}]`),
+                colorFn(chalk.dim(`[${args[1]}]`)),
+                colorFn(chalk.italic.dim(`(${args[2]})`)),
                 msgFn(formatMsg(args[3])),
             ];
         }
@@ -176,7 +182,5 @@ class Logiks {
         return;
     }
 }
-
-
 
 module.exports = Logiks;

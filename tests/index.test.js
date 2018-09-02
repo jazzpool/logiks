@@ -1,4 +1,5 @@
 const LogX = require('../src');
+const chalk = require('chalk');
 
 const log = console.log;
 global.console.log = (...args) => log(...args) || args[0];
@@ -26,6 +27,29 @@ describe('LogX', () => {
 
         it('if it is ok', () => {
             expect(infoLevel.info('test')).toBe('test');
+        });
+    });
+
+    describe('levels', () => {
+        const log = new LogX({colors: false, level: 'info', date: false});
+
+        it('.withSystem', () => {
+            expect(log.withSystem('system').info('test')).toBe('[system] test');
+        });
+
+        it('.withComponent', () => {
+            expect(log
+                .withSystem('system')
+                .withComponent('component')
+                .info('test')).toBe('[system] ' + chalk.dim('[component]') + ' test');
+        });
+
+        it('.withSubcat', () => {
+            expect(log
+                .withSystem('system')
+                .withComponent('component')
+                .withSubCat('subcat')
+                .info('test')).toBe('[system] ' + chalk.dim('[component]') + ' ' + chalk.italic.dim('(subcat)') + ' test');
         });
     });
 });
