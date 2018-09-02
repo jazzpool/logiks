@@ -1,4 +1,4 @@
-# Logiks 📝
+# Logiks 📝 [![Build Status](https://travis-ci.org/jazzpool/logx.svg?branch=master)](https://travis-ci.org/jazzpool/logx)
 
 Simple colored logger module with levels of logging and semantic output.
 
