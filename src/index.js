@@ -29,7 +29,7 @@ function formatMsg(msg) {
         return JSON.stringify(msg);
     }
 
-    return value;
+    return msg;
 }
 
 class Logiks {
