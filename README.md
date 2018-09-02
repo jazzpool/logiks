@@ -3,7 +3,7 @@
 Simple colored logger module with levels of logging and semantic output.
 
 ```js
-var logger = new Logiks({
+const logger = new Logiks({
     level: 'debug',
     color: true,
 });
@@ -15,7 +15,7 @@ logger.error('System', 'Component', 'Message')
 
 ## Signature semantics
 
-Logger can take up to 4 different positional arguments. 
+Logger can take up to 4 different positional arguments-groupings:
 ```
 logger.error(
     system: string,
@@ -29,7 +29,7 @@ Note that message argument will appear anyway and if `n`th argument missed it me
 
 
 ```js
-logger.special('Payments started@);
+logger.special('Payments started');
 
 logger.info('API', 'Payments', 'Performing payments');
 /* ...*/
@@ -51,6 +51,11 @@ The output will be:
 2018-09-02 02:01:39 ───┴────────────────────────────────────────────────────────────────────────
 ```
 
+### Groups
+
+You can create logger instance already with grouping curried with:
+ 1. In configuration.Look at <a href="#config-groups">config groupings</a>.
+ 2. With methods `.withSystem`, `.withComponent` and `.withSubcat`.
 
 ## Config
 
@@ -89,6 +94,21 @@ The output will be:
     ['critical', chalk.red.underline.bold],
 ]
 </pre></td>
+	</tr>
+	<tr>
+		<td colspan=3>
+			<h3 id="config-groups">Groups</h3>
+			<p><i>All is null by default</i></p>
+		</td>
+	</tr>
+	<tr>
+		<td colspan=3><code>system</code></td>
+	</tr>
+	<tr>
+		<td colspan=3><code>component</code> <i>(requires system></i>/td>
+	</tr>
+	<tr>
+		<td colspan=3><code>subCat</code> <i>(requires component></i></td>
 	</tr>
 	<tr>
 		<td colspan=3>

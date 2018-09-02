@@ -15,12 +15,33 @@ const LEVELS = [
     ['critical', chalk.red.underline.bold],
 ];
 
-function formatMsg(value) {
+function formatMsg(msg) {
+    if (msg instanceof Error) {
+        const stackTop = (msg.stack || '').split('\n')[1];
+        return `${msg.name}: ${msg.message}. ${stackTop ? '(' + stackTop.trim() + ')' : ''}`;
+    }
+
+    if (msg instanceof RegExp) {
+        return msg.toString();
+    }
+
+    if (typeof msg === 'object') {
+        return JSON.stringify(msg);
+    }
+
     return value;
 }
 
 class Logiks {
     constructor(config) {
+        if (config.component && !config.system) {
+            throw new Error('At first specify system');
+        }
+
+        if (config.subCat && !config.component) {
+            throw new Error('At first specify system and component');
+        }
+
         this.config = {
             colors: false,
             level: 'info',
@@ -45,6 +66,10 @@ class Logiks {
         this.levels.forEach(([levelName, levelColorFn], i) => {
             if (levelName === this.config.level) {
                 logLevelPriority = i;
+            }
+
+            if (!this.config.colors) {
+                levelColorFn = identity => identity;
             }
 
             levelPriorities[levelName] = i;
@@ -101,7 +126,6 @@ class Logiks {
         let msgFn = chalk.dim;
 
         if (!this.config.colors) {
-            colorFn = identity => identity;
             msgFn = identity => identity;
         }
 
