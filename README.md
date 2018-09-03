@@ -5,7 +5,7 @@ Simple colored logger module with levels of logging and semantic output.
 ```js
 const logger = new Logiks({
     level: 'debug',
-    color: true,
+    colors: true,
 });
 
 logger.error('System', 'Component', 'Message')

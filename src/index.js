@@ -6,7 +6,7 @@ const chalk = require('chalk');
 const printJson = require('./json');
 
 const LEVELS = [
-    ['silly', chalk.white],
+    ['silly', chalk.dim],
     ['debug', chalk.green],
     ['info', chalk.magenta],
     ['warning', chalk.yellow],

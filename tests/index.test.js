@@ -52,4 +52,18 @@ describe('LogX', () => {
                 .info('test')).toBe('[system] ' + chalk.dim('[component]') + ' ' + chalk.italic.dim('(subcat)') + ' test');
         });
     });
+
+    describe('errors logging', () => {
+        const log = new LogX({colors: false, level: 'info', date: false});
+        let error = null;
+        try {
+            const t = a + 10; // eslint-disable-line
+        } catch (e) {
+            error = e;
+        }
+
+        const errMsg = '[Syntax error] ReferenceError: a is not defined.';
+
+        expect(log.error('Syntax error', error).startsWith(errMsg)).toBe(true);
+    });
 });

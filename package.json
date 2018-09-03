@@ -2,18 +2,23 @@
   "name": "logiks",
   "version": "1.0.0rc-04",
   "description": "Nodejs logger",
+  "keywords": [
+    "logging",
+    "semantic",
+    "logger",
+    "log",
+    "nodejs"
+  ],
   "homepage": "https://jazzpool.github.io/logx",
   "repository": {
     "type": "git",
     "url": "https://github.com/jazzpool/logx.git"
   },
-  "author": [
-    "Trdat Mkrtchyan <womtromb@gmail.com>"
-  ],
+  "author": "Trdat Mkrtchyan <womtromb@gmail.com>",
   "main": "./src/index.js",
   "scripts": {
     "test": "jest",
-    "eslint-check": "node node_modules/eslint-pre-commit-diff"  
+    "eslint-check": "node node_modules/eslint-pre-commit-diff"
   },
   "pre-commit": [
     "eslint-check"
