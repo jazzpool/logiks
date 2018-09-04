@@ -1,6 +1,6 @@
 {
   "name": "logiks",
-  "version": "1.0.0rc-04",
+  "version": "1.0.0",
   "description": "Nodejs logger",
   "keywords": [
     "logging",
