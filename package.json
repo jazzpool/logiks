@@ -9,10 +9,10 @@
     "log",
     "nodejs"
   ],
-  "homepage": "https://jazzpool.github.io/logx",
+  "homepage": "https://jazzpool.github.io/logiks",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jazzpool/logx.git"
+    "url": "https://github.com/jazzpool/logiks.git"
   },
   "author": "Trdat Mkrtchyan <womtromb@gmail.com>",
   "main": "./src/index.js",
