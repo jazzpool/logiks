@@ -46,6 +46,7 @@ class Logiks {
             colors: false,
             level: 'info',
             date: true,
+            timestamp: true,
             ...config,
         };
 
@@ -129,7 +130,7 @@ class Logiks {
             msgFn = identity => identity;
         }
 
-        const datePrefix = colorFn(dateFormat(new Date(), 'yyyy-mm-dd HH:MM:ss'));
+        const datePrefix = this.config.date ? colorFn(dateFormat(new Date(), 'yyyy-mm-dd HH:MM:ss ')) : '';
 
         let message = [];
 
@@ -168,7 +169,7 @@ class Logiks {
             ];
         }
 
-        return this.config.date ? datePrefix + ' ' + message.join(' ') : message.join(' ');
+        return datePrefix + message.join(' ');
     }
 
     log(...args) {
